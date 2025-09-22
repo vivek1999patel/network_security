@@ -9,7 +9,7 @@ from src.constants import TARGET_COLUMN
 from src.constants import DATA_TRANSFORMATION_IMPUTER_PARAMS
 from src.entity.config_entity import DataTransformationConfig
 from src.exception.exception import NetworkSecurityException
-from src.utils.utils import save_numpy_array_data, save_object
+from src.utils.main_utils.utils import save_numpy_array_data, save_object
 from src.entity.artifact_entity import DataTransformationArtifact, DataValidationArtifact
 
 class DataTransformation:

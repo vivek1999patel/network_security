@@ -1,6 +1,8 @@
 import sys
 from src.logging.logger import logging
+from src.components.model_trainer import ModelTrainer
 from src.components.data_ingestion import DataIngestion
+from src.entity.config_entity import ModelTrainerConfig
 from src.entity.config_entity import DataIngestionConfig
 from src.components.data_validation import DataValidation
 from src.entity.config_entity import DataValidationConfig
@@ -30,6 +32,12 @@ if __name__=="__main__":
         data_transformation=DataTransformation(data_validation_artifact, data_transformation_config)
         data_transformation_artifact=data_transformation.initiate_data_transformation()
         logging.info("Data Transformation Initiation Completed")
+
+        logging.info("Initiating Model Training")
+        model_trainer_config=ModelTrainerConfig(training_pipeline_config)
+        model_trainer=ModelTrainer(data_transformation_artifact, model_trainer_config)
+        model_trainer_artifact=model_trainer.initiate_model_trainer()
+        logging.info("Model Training Initiation Completed")
 
     except Exception as e:
         raise NetworkSecurityException(e, sys)

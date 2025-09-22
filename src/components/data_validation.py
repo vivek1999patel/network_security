@@ -5,7 +5,7 @@ from scipy.stats import ks_2samp
 from src.logging.logger import logging
 from src.constants import SCHEMA_FILE_PATH
 from src.entity.config_entity import DataValidationConfig
-from src.utils.utils import read_yaml_file, write_yaml_file
+from src.utils.main_utils.utils import read_yaml_file, write_yaml_file
 from src.entity.artifact_entity import DataIngestionArtifact
 from src.exception.exception import NetworkSecurityException
 from src.entity.artifact_entity import DataValidationArtifact
