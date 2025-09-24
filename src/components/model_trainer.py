@@ -1,6 +1,7 @@
 import os
 import sys
 import mlflow
+import dagshub
 import numpy as np
 from src.logging.logger import logging
 from mlflow.models import infer_signature
@@ -19,6 +20,7 @@ from src.utils.ml_utils.metric.classification_metric import get_classification_s
 from src.entity.artifact_entity import DataTransformationArtifact, ModelTrainerArtifact
 from src.utils.main_utils.utils import save_object, load_object, load_numpy_array_data, evaluate_models
 
+dagshub.init(repo_owner='vivek1999patel', repo_name='network_security', mlflow=True)
 
 class ModelTrainer:
     def __init__(self, data_transformation_artifact: DataTransformationArtifact, model_trainer_config: ModelTrainerConfig):
@@ -39,8 +41,7 @@ class ModelTrainer:
                 mlflow.log_metric("precision_score", precision_score)
                 mlflow.log_metric("recall_score", recall_score)
 
-                signature=infer_signature(feature, label)
-                mlflow.sklearn.log_model(best_model, "model", signature=signature)
+                mlflow.sklearn.log_model(best_model, "model")
 
         except Exception as e:
             raise NetworkSecurityException(e, sys)
@@ -109,6 +110,8 @@ class ModelTrainer:
             network_model=NetworkModel(preprocessor, best_model)
             save_object(self.model_trainer_config.trained_model_file_path, obj=NetworkModel)
 
+            save_object("best_model/model.pkl", best_model)
+            
             # Create model trainer artifact
             model_trainer_artifact=ModelTrainerArtifact(
                 trainer_model_file_path=self.model_trainer_config.trained_model_file_path,
@@ -123,6 +126,7 @@ class ModelTrainer:
         
     def initiate_model_trainer(self) -> ModelTrainerArtifact:
         try:
+            print(self.data_transformation_artifact)
             train_file_path=self.data_transformation_artifact.transformed_train_file_path
             test_file_path=self.data_transformation_artifact.transformed_test_file_path
 
