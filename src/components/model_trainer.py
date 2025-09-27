@@ -1,8 +1,8 @@
 import os
 import sys
 import mlflow
-import dagshub
 import numpy as np
+from dotenv import load_dotenv
 from src.logging.logger import logging
 from mlflow.models import infer_signature
 from sklearn.linear_model import LogisticRegression
@@ -20,7 +20,10 @@ from src.utils.ml_utils.metric.classification_metric import get_classification_s
 from src.entity.artifact_entity import DataTransformationArtifact, ModelTrainerArtifact
 from src.utils.main_utils.utils import save_object, load_object, load_numpy_array_data, evaluate_models
 
-dagshub.init(repo_owner='vivek1999patel', repo_name='network_security', mlflow=True)
+load_dotenv()
+if os.getenv("ENABLE_DAGSHUB", "False") == "True":
+    import dagshub
+    dagshub.init(repo_owner='vivek1999patel', repo_name='network_security', mlflow=True)
 
 class ModelTrainer:
     def __init__(self, data_transformation_artifact: DataTransformationArtifact, model_trainer_config: ModelTrainerConfig):
